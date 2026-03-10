@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase Status Monitor</title>
+        <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7f8fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 32px 16px;
+            min-height: 100vh;
+        }
+
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.06);
+            width: 100%;
+            max-width: 460px;
+            margin-bottom: 16px;
+        }
+
+        .card h3 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 16px;
+        }
+
+        #myInfo {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 16px;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        button {
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            transition: filter 0.15s, transform 0.15s;
+        }
+
+        button:hover { filter: brightness(0.95); transform: translateY(-1px); }
+        button:active { transform: translateY(0); }
+
+        .btn-study { background: #dcfce7; color: #16a34a; }
+        .btn-coffee { background: #fef9c3; color: #ca8a04; }
+        .btn-game  { background: #dbeafe; color: #2563eb; }
+        .btn-home  { background: #f3f4f6; color: #4b5563; }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .user-item:last-child { border-bottom: none; }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        #groupList {
+            font-size: 14px;
+            color: #9ca3af;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h3>Мой профиль</h3>
+        <p id="myInfo">Загрузка...</p>
+        <div class="controls">
+            <button class="btn-study" onclick="changeStatus('Учусь', '#28a745')">📚 Учусь</button>
+            <button class="btn-coffee" onclick="changeStatus('Кофе-брейк', '#ffc107')">☕ Кофе</button>
+            <button class="btn-game" onclick="changeStatus('В игре', '#17a2b8')">🎮 В игре</button>
+            <button class="btn-home" onclick="changeStatus('Дома', '#6c757d')">🏠 Дома</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Монитор группы</h3>
+        <div id="groupList">Поиск студентов...</div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+        const URL = 'https://omcdabtrzuyuurpefxbu.supabase.co';
+        const KEY = 'sb_publishable_pmffNz1REHcDxvJ8ub2Qbg_tdwSMfaT';
+        const supabase = createClient(URL, KEY);
+
+        const MY_ID = '42c24125-0056-47cf-a331-7e0b8305a3b0'; 
+
+        window.changeStatus = async (text, color) => {
+            const { error } = await supabase
+                .from('profiles')
+                .update({ status: text, color: color })
+                .eq('id', MY_ID);
+
+            if (error) {
+                alert("Ошибка! Проверьте RLS политики в Supabase.");
+                console.error(error);
+            } else {
+                fetchGroup();
+            }
+        };
+
+        async function fetchGroup() {
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('*')
+                .order('username', { ascending: true });
+
+            if (error) return console.error(error);
+
+            const list = document.getElementById('groupList');
+            list.innerHTML = data.map(user => `
+                <div class="user-item">
+                    <div class="status-dot" style="background: ${user.color || '#ccc'}"></div>
+                    <div style="flex-grow: 1;">
+                        <strong>${user.username}</strong><br>
+                        <small style="color: #666;">${user.status || 'Статус не задан'}</small>
+                    </div>
+                </div>
+            `).join('');
+
+            const me = data.find(u => u.id === MY_ID);
+            if (me) document.getElementById('myInfo').innerText = `Вы зашли как: ${me.username}`;
+        }
+
+        fetchGroup();
+
+        setInterval(fetchGroup, 5000);
+    </script>
+</body>
+</html>
