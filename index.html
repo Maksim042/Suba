@@ -314,10 +314,10 @@
             <button class="btn-logout" onclick="signOut()">Выйти</button>
         </div>
         <div class="controls">
-            <button class="status-btn btn-study"  onclick="changeStatus('Учусь', '#22c55e')">📚 Учусь</button>
-            <button class="status-btn btn-coffee" onclick="changeStatus('Кофе-брейк', '#f59e0b')">☕ Кофе</button>
-            <button class="status-btn btn-game"   onclick="changeStatus('В игре', '#3b82f6')">🎮 В игре</button>
-            <button class="status-btn btn-home"   onclick="changeStatus('Дома', '#9ca3af')">🏠 Дома</button>
+            <button class="status-btn btn-study"  onclick="changeStatus(this, 'Учусь', '#22c55e')">📚 Учусь</button>
+            <button class="status-btn btn-coffee" onclick="changeStatus(this, 'Кофе-брейк', '#f59e0b')">☕ Кофе</button>
+            <button class="status-btn btn-game"   onclick="changeStatus(this, 'В игре', '#3b82f6')">🎮 В игре</button>
+            <button class="status-btn btn-home"   onclick="changeStatus(this, 'Дома', '#9ca3af')">🏠 Дома</button>
         </div>
     </div>
 
@@ -412,11 +412,11 @@
     }
 
     // ── STATUS UPDATE ─────────────────────────────────
-    window.changeStatus = async (text, color) => {
+    window.changeStatus = async (btn, text, color) => {
         if (!currentUser) return;
 
         document.querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'));
-        event.currentTarget.classList.add('active');
+        btn.classList.add('active');
 
         const { error } = await supabase
             .from('profiles')
