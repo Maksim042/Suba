@@ -88,11 +88,18 @@
         .status-btn {
             padding: 12px; border: none; border-radius: 12px; cursor: pointer;
             font-family: 'Onest', sans-serif; font-size: 13px; font-weight: 600;
-            transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 6px;
+            transition: all 0.15s; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 2px;
         }
         .status-btn:hover { filter: brightness(0.94); transform: translateY(-1px); }
         .status-btn:active { transform: translateY(0); }
         .status-btn.active { outline: 2.5px solid currentColor; outline-offset: 2px; }
+        .status-btn .btn-label { font-size: 13px; font-weight: 600; }
+        .status-btn .btn-timer {
+            font-size: 11px; font-weight: 700; opacity: 0.75;
+            font-variant-numeric: tabular-nums;
+            min-height: 14px;
+        }
         .btn-study  { background: #dcfce7; color: #16a34a; }
         .btn-coffee { background: #fef9c3; color: #b45309; }
         .btn-game   { background: #dbeafe; color: #1d4ed8; }
@@ -109,38 +116,27 @@
 
         .status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
         .user-name { font-size: 14px; font-weight: 600; color: var(--text); }
-
-        .user-status-row { display: flex; align-items: center; gap: 5px; margin-top: 2px; }
+        .user-status-row { display: flex; align-items: center; gap: 5px; margin-top: 2px; flex-wrap: wrap; }
         .user-status { font-size: 12px; color: var(--muted); }
+        .user-timer { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; opacity: 0.8; }
 
-        /* Online badge */
         .online-badge {
             display: inline-flex; align-items: center; gap: 3px;
             font-size: 10px; font-weight: 700; color: var(--online);
-            background: #dcfce7; border-radius: 20px;
-            padding: 1px 6px; line-height: 1.6;
+            background: #dcfce7; border-radius: 20px; padding: 1px 6px; line-height: 1.6;
         }
         .online-badge::before {
-            content: '';
-            width: 5px; height: 5px; border-radius: 50%;
-            background: var(--online);
-            display: inline-block;
-            animation: pulse 2s infinite;
+            content: ''; width: 5px; height: 5px; border-radius: 50%;
+            background: var(--online); display: inline-block; animation: pulse 2s infinite;
         }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-        /* Avatar wrapper for online ring */
         .avatar-wrap { position: relative; flex-shrink: 0; }
         .avatar-wrap .online-ring {
             position: absolute; bottom: 0; right: 0;
             width: 10px; height: 10px; border-radius: 50%;
-            background: var(--online);
-            border: 2px solid var(--card);
+            background: var(--online); border: 2px solid var(--card);
         }
-
         .user-avatar-sm { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: var(--accent-light); }
         .user-avatar-sm-ph {
             width: 36px; height: 36px; border-radius: 50%; background: var(--accent);
@@ -159,10 +155,8 @@
         }
         .chat-messages::-webkit-scrollbar { width: 3px; }
         .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-
         .msg-row { display: flex; gap: 8px; align-items: flex-end; animation: fadeIn 0.2s ease; }
         .msg-row.mine { flex-direction: row-reverse; }
-
         .msg-ava { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
         .msg-ava-ph {
             width: 28px; height: 28px; border-radius: 50%; background: var(--accent);
@@ -177,7 +171,6 @@
         .msg-row.theirs .msg-bubble { background: #f3f4f6; color: var(--text); border-bottom-left-radius: 4px; }
         .msg-time { font-size: 10px; opacity: 0.55; margin-top: 4px; }
         .msg-row.mine .msg-time { text-align: right; }
-
         .chat-input-row { display: flex; gap: 8px; align-items: flex-end; }
         .chat-input {
             flex: 1; border: 1.5px solid var(--border); border-radius: 12px;
@@ -235,10 +228,22 @@
             <button class="btn-logout" onclick="signOut()">Выйти</button>
         </div>
         <div class="controls">
-            <button class="status-btn btn-study"  onclick="changeStatus(this, 'Учусь', '#22c55e')">📚 Учусь</button>
-            <button class="status-btn btn-coffee" onclick="changeStatus(this, 'Кофе-брейк', '#f59e0b')">☕ Кофе</button>
-            <button class="status-btn btn-game"   onclick="changeStatus(this, 'В игре', '#3b82f6')">🎮 В игре</button>
-            <button class="status-btn btn-home"   onclick="changeStatus(this, 'Дома', '#9ca3af')">🏠 Дома</button>
+            <button class="status-btn btn-study"  id="btn-study"  onclick="changeStatus(this, 'Учусь', '#22c55e')">
+                <span class="btn-label">📚 Учусь</span>
+                <span class="btn-timer" id="timer-study"></span>
+            </button>
+            <button class="status-btn btn-coffee" id="btn-coffee" onclick="changeStatus(this, 'Кофе-брейк', '#f59e0b')">
+                <span class="btn-label">☕ Кофе</span>
+                <span class="btn-timer" id="timer-coffee"></span>
+            </button>
+            <button class="status-btn btn-game"   id="btn-game"   onclick="changeStatus(this, 'В игре', '#3b82f6')">
+                <span class="btn-label">🎮 В игре</span>
+                <span class="btn-timer" id="timer-game"></span>
+            </button>
+            <button class="status-btn btn-home"   id="btn-home"   onclick="changeStatus(this, 'Дома', '#9ca3af')">
+                <span class="btn-label">🏠 Дома</span>
+                <span class="btn-timer" id="timer-home"></span>
+            </button>
         </div>
     </div>
 
@@ -270,14 +275,29 @@
 
     let currentUser = null;
     let pollInterval = null;
+    let timerInterval = null;
+    let currentTimerStart = null; // локальное время старта таймера
 
-    // Считаем онлайн если last_seen был < 60 сек назад
     const ONLINE_THRESHOLD_SEC = 60;
+    const STATUS_BTN_MAP = {
+        'Учусь':      'study',
+        'Кофе-брейк': 'coffee',
+        'В игре':     'game',
+        'Дома':       'home',
+    };
 
     function isOnline(lastSeen) {
         if (!lastSeen) return false;
-        const diff = (Date.now() - new Date(lastSeen).getTime()) / 1000;
-        return diff < ONLINE_THRESHOLD_SEC;
+        return (Date.now() - new Date(lastSeen).getTime()) / 1000 < ONLINE_THRESHOLD_SEC;
+    }
+
+    function formatDuration(seconds) {
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = seconds % 60;
+        if (h > 0) return `${h}ч ${m}м`;
+        if (m > 0) return `${m}м ${s}с`;
+        return `${s}с`;
     }
 
     // ── AUTH ──────────────────────────────────────────
@@ -297,15 +317,14 @@
         window.location.href = window.location.pathname;
     };
 
-    // ── SESSION CHECK ─────────────────────────────────
+    // ── SESSION ───────────────────────────────────────
     async function init() {
         const { data: { session } } = await supabase.auth.getSession();
         if (session) await onLogin(session.user);
 
         supabase.auth.onAuthStateChange(async (event, session) => {
-            if (event === 'SIGNED_IN' && session) {
-                await onLogin(session.user);
-            } else if (event === 'SIGNED_OUT') {
+            if (event === 'SIGNED_IN' && session) await onLogin(session.user);
+            else if (event === 'SIGNED_OUT') {
                 document.getElementById('appScreen').style.display = 'none';
                 document.getElementById('loginScreen').style.display = 'flex';
             }
@@ -338,13 +357,33 @@
             avatarEl.textContent = username[0].toUpperCase();
         }
 
-        // Обновляем last_seen каждые 30 сек
+        // Восстанавливаем активную кнопку и таймер из БД
+        await restoreTimer();
+
         updateLastSeen();
         setInterval(updateLastSeen, 30000);
 
         fetchGroup();
         pollInterval = setInterval(fetchGroup, 5000);
         initChat();
+    }
+
+    async function restoreTimer() {
+        const { data } = await supabase
+            .from('profiles').select('status, timer_started_at').eq('id', currentUser.id).single();
+
+        if (data?.status && data?.timer_started_at) {
+            const btnKey = STATUS_BTN_MAP[data.status];
+            if (btnKey) {
+                const btn = document.getElementById('btn-' + btnKey);
+                if (btn) {
+                    document.querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                }
+            }
+            currentTimerStart = new Date(data.timer_started_at).getTime();
+            startTimerTick(STATUS_BTN_MAP[data.status]);
+        }
     }
 
     async function updateLastSeen() {
@@ -354,16 +393,47 @@
             .eq('id', currentUser.id);
     }
 
-    // ── STATUS UPDATE ─────────────────────────────────
+    // ── STATUS + TIMER ────────────────────────────────
     window.changeStatus = async (btn, text, color) => {
         if (!currentUser) return;
+
         document.querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        const { error } = await supabase
-            .from('profiles').update({ status: text, color }).eq('id', currentUser.id);
-        if (error) showToast('Ошибка обновления статуса');
-        else fetchGroup();
+
+        // Сбрасываем старый таймер
+        clearInterval(timerInterval);
+        document.querySelectorAll('.btn-timer').forEach(t => t.textContent = '');
+
+        const now = new Date().toISOString();
+        currentTimerStart = Date.now();
+
+        const { error } = await supabase.from('profiles').update({
+            status: text,
+            color,
+            timer_started_at: now
+        }).eq('id', currentUser.id);
+
+        if (error) { showToast('Ошибка обновления статуса'); return; }
+
+        const btnKey = STATUS_BTN_MAP[text];
+        startTimerTick(btnKey);
+        fetchGroup();
     };
+
+    function startTimerTick(btnKey) {
+        clearInterval(timerInterval);
+        if (!btnKey || !currentTimerStart) return;
+
+        const timerEl = document.getElementById('timer-' + btnKey);
+
+        function tick() {
+            const elapsed = Math.floor((Date.now() - currentTimerStart) / 1000);
+            if (timerEl) timerEl.textContent = formatDuration(elapsed);
+        }
+
+        tick();
+        timerInterval = setInterval(tick, 1000);
+    }
 
     // ── FETCH GROUP ───────────────────────────────────
     async function fetchGroup() {
@@ -382,13 +452,16 @@
             const online = isOnline(user.last_seen);
             const initial = (user.username || '?')[0].toUpperCase();
 
+            // Считаем время для чужих пользователей
+            let timerStr = '';
+            if (user.timer_started_at && user.status) {
+                const elapsed = Math.floor((Date.now() - new Date(user.timer_started_at).getTime()) / 1000);
+                if (elapsed >= 0) timerStr = `· ${formatDuration(elapsed)}`;
+            }
+
             const avatarHtml = user.avatar_url
                 ? `<img class="user-avatar-sm" src="${user.avatar_url}" alt="">`
                 : `<div class="user-avatar-sm-ph">${initial}</div>`;
-
-            const onlineBadge = online
-                ? `<span class="online-badge">онлайн</span>`
-                : '';
 
             return `
                 <div class="user-item">
@@ -402,7 +475,8 @@
                         </div>
                         <div class="user-status-row">
                             <span class="user-status">${user.status || 'Статус не задан'}</span>
-                            ${onlineBadge}
+                            ${timerStr ? `<span class="user-timer">${timerStr}</span>` : ''}
+                            ${online ? '<span class="online-badge">онлайн</span>' : ''}
                         </div>
                     </div>
                     <div class="status-dot" style="background:${user.color || '#d1d5db'}"></div>
@@ -414,15 +488,12 @@
     function initChat() {
         supabase
             .channel('public:messages')
-            .on('postgres_changes', {
-                event: 'INSERT', schema: 'public', table: 'messages'
-            }, payload => {
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
                 appendMessage(payload.new);
             })
             .subscribe();
 
         loadMessages();
-
         document.getElementById('sendBtn').onclick = sendMessage;
         document.getElementById('chatInput').addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
@@ -434,7 +505,6 @@
             .from('messages').select('*')
             .order('created_at', { ascending: true }).limit(50);
         if (error) return console.error(error);
-
         const container = document.getElementById('chatMessages');
         container.innerHTML = '';
         data.forEach(msg => appendMessage(msg, false));
@@ -446,11 +516,9 @@
         const mine = currentUser && msg.user_id === currentUser.id;
         const initial = (msg.username || '?')[0].toUpperCase();
         const time = new Date(msg.created_at).toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit' });
-
         const avatarHtml = msg.avatar_url
             ? `<img class="msg-ava" src="${msg.avatar_url}" alt="">`
             : `<div class="msg-ava-ph">${initial}</div>`;
-
         const div = document.createElement('div');
         div.className = 'msg-row ' + (mine ? 'mine' : 'theirs');
         div.innerHTML = `
@@ -469,23 +537,17 @@
         const input = document.getElementById('chatInput');
         const text = input.value.trim();
         if (!text) return;
-
         const btn = document.getElementById('sendBtn');
         btn.disabled = true;
         input.value = '';
-
         const username = currentUser.user_metadata?.full_name
             || currentUser.user_metadata?.name
             || currentUser.email?.split('@')[0]
             || 'Без имени';
-
         const { error } = await supabase.from('messages').insert({
-            user_id: currentUser.id,
-            username,
-            avatar_url: currentUser.user_metadata?.avatar_url || null,
-            text
+            user_id: currentUser.id, username,
+            avatar_url: currentUser.user_metadata?.avatar_url || null, text
         });
-
         if (error) showToast('Ошибка отправки сообщения');
         btn.disabled = false;
         input.focus();
