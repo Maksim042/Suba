@@ -21,191 +21,77 @@
         body {
             font-family: 'Onest', sans-serif;
             background: var(--bg);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px 16px;
-            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 40px 16px; min-height: 100vh;
         }
 
-        /* ── LOGIN SCREEN ── */
+        /* ── LOGIN ── */
         #loginScreen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 80vh;
-            gap: 0;
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; min-height: 80vh;
         }
-
         .login-card {
-            background: var(--card);
-            border-radius: 24px;
-            padding: 48px 40px;
+            background: var(--card); border-radius: 24px; padding: 48px 40px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 8px 32px rgba(0,0,0,0.08);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
+            width: 100%; max-width: 400px; text-align: center;
         }
-
         .login-logo {
-            width: 56px;
-            height: 56px;
-            background: var(--accent);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            margin: 0 auto 24px;
+            width: 56px; height: 56px; background: var(--accent); border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px; margin: 0 auto 24px;
         }
-
-        .login-card h1 {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 8px;
-        }
-
-        .login-card p {
-            font-size: 14px;
-            color: var(--muted);
-            margin-bottom: 32px;
-            line-height: 1.5;
-        }
-
+        .login-card h1 { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+        .login-card p { font-size: 14px; color: var(--muted); margin-bottom: 32px; line-height: 1.5; }
         .btn-google {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            padding: 14px 20px;
-            background: var(--card);
-            border: 1.5px solid var(--border);
-            border-radius: 12px;
-            cursor: pointer;
-            font-family: 'Onest', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text);
-            transition: all 0.15s;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 14px 20px; background: var(--card);
+            border: 1.5px solid var(--border); border-radius: 12px; cursor: pointer;
+            font-family: 'Onest', sans-serif; font-size: 14px; font-weight: 600;
+            color: var(--text); transition: all 0.15s;
         }
-
-        .btn-google:hover {
-            background: #fafafa;
-            border-color: #c5c8d6;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
-
+        .btn-google:hover { background: #fafafa; border-color: #c5c8d6; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
         .btn-google svg { flex-shrink: 0; }
 
-        /* ── MAIN APP ── */
+        /* ── APP ── */
         #appScreen { display: none; width: 100%; max-width: 460px; }
 
         .card {
-            background: var(--card);
-            padding: 24px;
-            border-radius: 20px;
+            background: var(--card); padding: 24px; border-radius: 20px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.06);
-            width: 100%;
-            margin-bottom: 16px;
+            width: 100%; margin-bottom: 16px;
         }
-
         .card-label {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 16px;
+            font-size: 11px; font-weight: 700; color: var(--muted);
+            text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px;
         }
 
-        /* Profile header */
-        .profile-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: var(--accent-light);
-            object-fit: cover;
-            flex-shrink: 0;
-        }
-
+        /* Profile */
+        .profile-row { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--accent-light); object-fit: cover; flex-shrink: 0; }
         .avatar-placeholder {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: 700;
-            color: white;
-            flex-shrink: 0;
+            width: 44px; height: 44px; border-radius: 50%; background: var(--accent);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; font-weight: 700; color: white; flex-shrink: 0;
         }
-
-        .profile-name {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .profile-email {
-            font-size: 12px;
-            color: var(--muted);
-            margin-top: 2px;
-        }
-
+        .profile-name { font-size: 15px; font-weight: 600; color: var(--text); }
+        .profile-email { font-size: 12px; color: var(--muted); margin-top: 2px; }
         .btn-logout {
-            margin-left: auto;
-            padding: 6px 14px;
-            border: 1.5px solid var(--border);
-            background: transparent;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--muted);
-            cursor: pointer;
-            transition: all 0.15s;
+            margin-left: auto; padding: 6px 14px; border: 1.5px solid var(--border);
+            background: transparent; border-radius: 8px; font-size: 12px; font-weight: 600;
+            color: var(--muted); cursor: pointer; transition: all 0.15s;
         }
-
         .btn-logout:hover { border-color: #f87171; color: #ef4444; }
 
         /* Status buttons */
-        .controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-
+        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .status-btn {
-            padding: 12px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-family: 'Onest', sans-serif;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.15s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
+            padding: 12px; border: none; border-radius: 12px; cursor: pointer;
+            font-family: 'Onest', sans-serif; font-size: 13px; font-weight: 600;
+            transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 6px;
         }
-
         .status-btn:hover { filter: brightness(0.94); transform: translateY(-1px); }
         .status-btn:active { transform: translateY(0); }
         .status-btn.active { outline: 2.5px solid currentColor; outline-offset: 2px; }
-
         .btn-study  { background: #dcfce7; color: #16a34a; }
         .btn-coffee { background: #fef9c3; color: #b45309; }
         .btn-game   { background: #dbeafe; color: #1d4ed8; }
@@ -213,75 +99,75 @@
 
         /* Group list */
         .user-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 11px 0;
-            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 12px;
+            padding: 11px 0; border-bottom: 1px solid var(--border);
             animation: fadeIn 0.2s ease;
         }
-
         .user-item:last-child { border-bottom: none; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
         .user-name { font-size: 14px; font-weight: 600; color: var(--text); }
         .user-status { font-size: 12px; color: var(--muted); margin-top: 2px; }
-
-        .user-avatar-sm {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            object-fit: cover;
-            background: var(--accent-light);
-            flex-shrink: 0;
-        }
-
+        .user-avatar-sm { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: var(--accent-light); flex-shrink: 0; }
         .user-avatar-sm-ph {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: 700;
-            color: white;
-            flex-shrink: 0;
+            width: 36px; height: 36px; border-radius: 50%; background: var(--accent);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 700; color: white; flex-shrink: 0;
         }
-
         #groupList { color: var(--muted); font-size: 14px; }
+        .refresh-hint { font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px; opacity: 0.7; }
 
-        .refresh-hint {
-            font-size: 11px;
-            color: var(--muted);
-            text-align: center;
-            margin-top: 8px;
-            opacity: 0.7;
+        /* ── CHAT ── */
+        .chat-messages {
+            display: flex; flex-direction: column; gap: 10px;
+            max-height: 320px; overflow-y: auto;
+            margin-bottom: 14px; padding-right: 4px;
         }
+        .chat-messages::-webkit-scrollbar { width: 3px; }
+        .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-        /* Error toast */
+        .msg-row { display: flex; gap: 8px; align-items: flex-end; animation: fadeIn 0.2s ease; }
+        .msg-row.mine { flex-direction: row-reverse; }
+
+        .msg-ava { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+        .msg-ava-ph {
+            width: 28px; height: 28px; border-radius: 50%; background: var(--accent);
+            color: white; font-size: 11px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .msg-content { max-width: 72%; display: flex; flex-direction: column; }
+        .msg-sender { font-size: 10px; font-weight: 700; color: var(--muted); margin-bottom: 3px; }
+        .msg-row.mine .msg-sender { text-align: right; }
+        .msg-bubble { padding: 9px 14px; border-radius: 16px; font-size: 13px; line-height: 1.5; word-break: break-word; }
+        .msg-row.mine .msg-bubble { background: var(--accent); color: white; border-bottom-right-radius: 4px; }
+        .msg-row.theirs .msg-bubble { background: #f3f4f6; color: var(--text); border-bottom-left-radius: 4px; }
+        .msg-time { font-size: 10px; opacity: 0.55; margin-top: 4px; }
+        .msg-row.mine .msg-time { text-align: right; }
+
+        .chat-input-row { display: flex; gap: 8px; align-items: flex-end; }
+        .chat-input {
+            flex: 1; border: 1.5px solid var(--border); border-radius: 12px;
+            padding: 10px 14px; font-family: 'Onest', sans-serif; font-size: 13px;
+            color: var(--text); resize: none; outline: none; transition: border-color 0.15s;
+            min-height: 42px; max-height: 100px;
+        }
+        .chat-input:focus { border-color: var(--accent); }
+        .chat-input::placeholder { color: var(--muted); }
+        .send-btn {
+            width: 42px; height: 42px; border-radius: 12px; background: var(--accent);
+            border: none; color: white; font-size: 16px; cursor: pointer; transition: all 0.15s;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .send-btn:hover { background: #4338ca; transform: translateY(-1px); }
+        .send-btn:disabled { background: var(--border); cursor: not-allowed; transform: none; }
+
+        /* ── TOAST ── */
         .toast {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
+            position: fixed; bottom: 24px; left: 50%;
             transform: translateX(-50%) translateY(80px);
-            background: #1a1d23;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: 500;
-            transition: transform 0.3s;
-            z-index: 999;
+            background: #1a1d23; color: white; padding: 12px 20px;
+            border-radius: 12px; font-size: 13px; font-weight: 500;
+            transition: transform 0.3s; z-index: 999;
         }
         .toast.show { transform: translateX(-50%) translateY(0); }
     </style>
@@ -303,6 +189,7 @@
 
 <!-- APP -->
 <div id="appScreen">
+
     <div class="card">
         <div class="card-label">Мой профиль</div>
         <div class="profile-row">
@@ -326,6 +213,16 @@
         <div id="groupList">Загрузка...</div>
         <div class="refresh-hint">Обновляется каждые 5 сек</div>
     </div>
+
+    <div class="card">
+        <div class="card-label">💬 Общий чат</div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-row">
+            <textarea class="chat-input" id="chatInput" placeholder="Сообщение..." rows="1"></textarea>
+            <button class="send-btn" id="sendBtn">➤</button>
+        </div>
+    </div>
+
 </div>
 
 <div class="toast" id="toast"></div>
@@ -360,9 +257,7 @@
     // ── SESSION CHECK ─────────────────────────────────
     async function init() {
         const { data: { session } } = await supabase.auth.getSession();
-        if (session) {
-            await onLogin(session.user);
-        }
+        if (session) await onLogin(session.user);
 
         supabase.auth.onAuthStateChange(async (event, session) => {
             if (event === 'SIGNED_IN' && session) {
@@ -377,25 +272,18 @@
     async function onLogin(user) {
         currentUser = user;
 
-        // Upsert profile
         const username = user.user_metadata?.full_name
             || user.user_metadata?.name
             || user.email?.split('@')[0]
             || 'Без имени';
-
         const avatar = user.user_metadata?.avatar_url || null;
 
         await supabase.from('profiles').upsert({
-            id: user.id,
-            username,
-            avatar_url: avatar,
+            id: user.id, username, avatar_url: avatar
         }, { onConflict: 'id' });
 
-        // Show UI
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('appScreen').style.display = 'block';
-
-        // Update profile header
         document.getElementById('myName').textContent = username;
         document.getElementById('myEmail').textContent = user.email || '';
 
@@ -408,20 +296,16 @@
 
         fetchGroup();
         pollInterval = setInterval(fetchGroup, 5000);
+        initChat();
     }
 
     // ── STATUS UPDATE ─────────────────────────────────
     window.changeStatus = async (btn, text, color) => {
         if (!currentUser) return;
-
         document.querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-
         const { error } = await supabase
-            .from('profiles')
-            .update({ status: text, color })
-            .eq('id', currentUser.id);
-
+            .from('profiles').update({ status: text, color }).eq('id', currentUser.id);
         if (error) showToast('Ошибка обновления статуса');
         else fetchGroup();
     };
@@ -429,14 +313,10 @@
     // ── FETCH GROUP ───────────────────────────────────
     async function fetchGroup() {
         const { data, error } = await supabase
-            .from('profiles')
-            .select('*')
-            .order('username', { ascending: true });
-
+            .from('profiles').select('*').order('username', { ascending: true });
         if (error) return console.error(error);
 
         const list = document.getElementById('groupList');
-
         if (!data || data.length === 0) {
             list.innerHTML = '<div style="color:#9ca3af;font-size:14px;padding:8px 0">Пока никого нет</div>';
             return;
@@ -448,7 +328,6 @@
             const avatarHtml = user.avatar_url
                 ? `<img class="user-avatar-sm" src="${user.avatar_url}" alt="">`
                 : `<div class="user-avatar-sm-ph">${initial}</div>`;
-
             return `
                 <div class="user-item">
                     ${avatarHtml}
@@ -459,6 +338,87 @@
                     <div class="status-dot" style="background:${user.color || '#d1d5db'}"></div>
                 </div>`;
         }).join('');
+    }
+
+    // ── CHAT ──────────────────────────────────────────
+    function initChat() {
+        supabase
+            .channel('public:messages')
+            .on('postgres_changes', {
+                event: 'INSERT', schema: 'public', table: 'messages'
+            }, payload => {
+                appendMessage(payload.new);
+            })
+            .subscribe();
+
+        loadMessages();
+
+        document.getElementById('sendBtn').onclick = sendMessage;
+        document.getElementById('chatInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+        });
+    }
+
+    async function loadMessages() {
+        const { data, error } = await supabase
+            .from('messages').select('*')
+            .order('created_at', { ascending: true }).limit(50);
+        if (error) return console.error(error);
+
+        const container = document.getElementById('chatMessages');
+        container.innerHTML = '';
+        data.forEach(msg => appendMessage(msg, false));
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function appendMessage(msg, scroll = true) {
+        const container = document.getElementById('chatMessages');
+        const mine = currentUser && msg.user_id === currentUser.id;
+        const initial = (msg.username || '?')[0].toUpperCase();
+        const time = new Date(msg.created_at).toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit' });
+
+        const avatarHtml = msg.avatar_url
+            ? `<img class="msg-ava" src="${msg.avatar_url}" alt="">`
+            : `<div class="msg-ava-ph">${initial}</div>`;
+
+        const div = document.createElement('div');
+        div.className = 'msg-row ' + (mine ? 'mine' : 'theirs');
+        div.innerHTML = `
+            ${avatarHtml}
+            <div class="msg-content">
+                ${!mine ? `<div class="msg-sender">${msg.username}</div>` : ''}
+                <div class="msg-bubble">${msg.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+                <div class="msg-time">${time}</div>
+            </div>`;
+        container.appendChild(div);
+        if (scroll) container.scrollTop = container.scrollHeight;
+    }
+
+    async function sendMessage() {
+        if (!currentUser) return;
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+        if (!text) return;
+
+        const btn = document.getElementById('sendBtn');
+        btn.disabled = true;
+        input.value = '';
+
+        const username = currentUser.user_metadata?.full_name
+            || currentUser.user_metadata?.name
+            || currentUser.email?.split('@')[0]
+            || 'Без имени';
+
+        const { error } = await supabase.from('messages').insert({
+            user_id: currentUser.id,
+            username,
+            avatar_url: currentUser.user_metadata?.avatar_url || null,
+            text
+        });
+
+        if (error) showToast('Ошибка отправки сообщения');
+        btn.disabled = false;
+        input.focus();
     }
 
     // ── TOAST ─────────────────────────────────────────
