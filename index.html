@@ -16,6 +16,7 @@
             --muted: #8b8fa8;
             --accent: #4f46e5;
             --accent-light: #eef2ff;
+            --online: #22c55e;
         }
 
         body {
@@ -105,15 +106,48 @@
         }
         .user-item:last-child { border-bottom: none; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
         .status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
         .user-name { font-size: 14px; font-weight: 600; color: var(--text); }
-        .user-status { font-size: 12px; color: var(--muted); margin-top: 2px; }
-        .user-avatar-sm { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: var(--accent-light); flex-shrink: 0; }
+
+        .user-status-row { display: flex; align-items: center; gap: 5px; margin-top: 2px; }
+        .user-status { font-size: 12px; color: var(--muted); }
+
+        /* Online badge */
+        .online-badge {
+            display: inline-flex; align-items: center; gap: 3px;
+            font-size: 10px; font-weight: 700; color: var(--online);
+            background: #dcfce7; border-radius: 20px;
+            padding: 1px 6px; line-height: 1.6;
+        }
+        .online-badge::before {
+            content: '';
+            width: 5px; height: 5px; border-radius: 50%;
+            background: var(--online);
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Avatar wrapper for online ring */
+        .avatar-wrap { position: relative; flex-shrink: 0; }
+        .avatar-wrap .online-ring {
+            position: absolute; bottom: 0; right: 0;
+            width: 10px; height: 10px; border-radius: 50%;
+            background: var(--online);
+            border: 2px solid var(--card);
+        }
+
+        .user-avatar-sm { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: var(--accent-light); }
         .user-avatar-sm-ph {
             width: 36px; height: 36px; border-radius: 50%; background: var(--accent);
             display: flex; align-items: center; justify-content: center;
-            font-size: 13px; font-weight: 700; color: white; flex-shrink: 0;
+            font-size: 13px; font-weight: 700; color: white;
         }
+
         #groupList { color: var(--muted); font-size: 14px; }
         .refresh-hint { font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px; opacity: 0.7; }
 
@@ -237,6 +271,15 @@
     let currentUser = null;
     let pollInterval = null;
 
+    // Считаем онлайн если last_seen был < 60 сек назад
+    const ONLINE_THRESHOLD_SEC = 60;
+
+    function isOnline(lastSeen) {
+        if (!lastSeen) return false;
+        const diff = (Date.now() - new Date(lastSeen).getTime()) / 1000;
+        return diff < ONLINE_THRESHOLD_SEC;
+    }
+
     // ── AUTH ──────────────────────────────────────────
     window.signInWithGoogle = async () => {
         const { error } = await supabase.auth.signInWithOAuth({
@@ -279,7 +322,8 @@
         const avatar = user.user_metadata?.avatar_url || null;
 
         await supabase.from('profiles').upsert({
-            id: user.id, username, avatar_url: avatar
+            id: user.id, username, avatar_url: avatar,
+            last_seen: new Date().toISOString()
         }, { onConflict: 'id' });
 
         document.getElementById('loginScreen').style.display = 'none';
@@ -294,9 +338,20 @@
             avatarEl.textContent = username[0].toUpperCase();
         }
 
+        // Обновляем last_seen каждые 30 сек
+        updateLastSeen();
+        setInterval(updateLastSeen, 30000);
+
         fetchGroup();
         pollInterval = setInterval(fetchGroup, 5000);
         initChat();
+    }
+
+    async function updateLastSeen() {
+        if (!currentUser) return;
+        await supabase.from('profiles')
+            .update({ last_seen: new Date().toISOString() })
+            .eq('id', currentUser.id);
     }
 
     // ── STATUS UPDATE ─────────────────────────────────
@@ -324,16 +379,31 @@
 
         list.innerHTML = data.map(user => {
             const isMe = currentUser && user.id === currentUser.id;
+            const online = isOnline(user.last_seen);
             const initial = (user.username || '?')[0].toUpperCase();
+
             const avatarHtml = user.avatar_url
                 ? `<img class="user-avatar-sm" src="${user.avatar_url}" alt="">`
                 : `<div class="user-avatar-sm-ph">${initial}</div>`;
+
+            const onlineBadge = online
+                ? `<span class="online-badge">онлайн</span>`
+                : '';
+
             return `
                 <div class="user-item">
-                    ${avatarHtml}
+                    <div class="avatar-wrap">
+                        ${avatarHtml}
+                        ${online ? '<div class="online-ring"></div>' : ''}
+                    </div>
                     <div style="flex-grow:1; min-width:0">
-                        <div class="user-name">${user.username || 'Неизвестный'}${isMe ? ' <span style="color:#a5b4fc;font-size:11px;font-weight:500">(вы)</span>' : ''}</div>
-                        <div class="user-status">${user.status || 'Статус не задан'}</div>
+                        <div class="user-name">
+                            ${user.username || 'Неизвестный'}${isMe ? ' <span style="color:#a5b4fc;font-size:11px;font-weight:500">(вы)</span>' : ''}
+                        </div>
+                        <div class="user-status-row">
+                            <span class="user-status">${user.status || 'Статус не задан'}</span>
+                            ${onlineBadge}
+                        </div>
                     </div>
                     <div class="status-dot" style="background:${user.color || '#d1d5db'}"></div>
                 </div>`;
